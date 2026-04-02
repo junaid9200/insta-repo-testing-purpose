@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Source Sans 3', sans-serif;
+    }
+
+    .wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      padding: 20px;
+    }
+
+    /* ── Phone mockup ── */
+    .phone-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 380px;
+      height: 580px;
+      position: relative;
+    }
+
+    .phone {
+      width: 270px;
+      height: 540px;
+      border-radius: 36px;
+      border: 2px solid #dbdbdb;
+      background: #fff;
+      box-shadow: 0 4px 32px rgba(0,0,0,.12);
+      overflow: hidden;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    .phone img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* sliding screenshots */
+    .screen-slider {
+      width: 100%; height: 100%;
+      display: flex;
+      transition: none;
+    }
+
+    .screen {
+      min-width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+    }
+
+    /* ── Right panel ── */
+    .panel {
+      width: 350px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #dbdbdb;
+      border-radius: 2px;
+      padding: 40px 40px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .logo {
+      font-family: 'Grand Hotel', cursive;
+      font-size: 52px;
+      color: #262626;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      line-height: 1;
+    }
+
+    .form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      position: relative;
+      width: 100%;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 9px 10px 7px;
+      border: 1px solid #dbdbdb;
+      border-radius: 3px;
+      background: #fafafa;
+      font-family: inherit;
+      font-size: 12px;
+      color: #262626;
+      outline: none;
+      transition: border-color .15s;
+      height: 38px;
+    }
+
+    .field input:focus { border-color: #a8a8a8; }
+
+    .field label {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: #8e8e8e;
+      pointer-events: none;
+      transition: all .1s ease;
+    }
+
+    .field input:focus + label,
+    .field input:not(:placeholder-shown) + label {
+      top: 6px;
+      transform: none;
+      font-size: 10px;
+    }
+
+    .field input::placeholder { color: transparent; }
+
+    .show-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 13px;
+      font-weight: 700;
+      color: #262626;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .login-btn {
+      margin-top: 8px;
+      width: 100%;
+      padding: 7px;
+      background: #0095f6;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s, opacity .15s;
+    }
+
+    .login-btn:hover { background: #1877f2; }
+    .login-btn:disabled { opacity: .6; cursor: default; }
+
+    /* OR divider */
+    .or-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 18px 0 16px;
+    }
+
+    .or-row span { flex: 1; height: 1px; background: #dbdbdb; }
+    .or-row p { font-size: 13px; font-weight: 700; color: #8e8e8e; }
+
+    /* Facebook login */
+    .fb-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      color: #385185;
+      margin-bottom: 16px;
+    }
+
+    .fb-btn svg { flex-shrink: 0; }
+
+    .forgot {
+      font-size: 12px;
+      color: #385185;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* signup card */
+    .signup-card {
+      background: #fff;
+      border: 1px solid #dbdbdb;
+      border-radius: 2px;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #262626;
+    }
+
+    .signup-card a {
+      color: #0095f6;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* app download */
+    .app-row {
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    .app-row p { font-size: 14px; color: #262626; margin-bottom: 10px; }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .badge {
+      border: 1px solid #262626;
+      border-radius: 6px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #262626;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .badge strong { font-size: 13px; display: block; }
+
+    /* footer */
+    footer {
+      margin-top: 48px;
+      text-align: center;
+      font-size: 12px;
+      color: #8e8e8e;
+      width: 100%;
+      max-width: 920px;
+      padding: 0 20px;
+    }
+
+    footer nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; margin-bottom: 16px; }
+    footer nav a { color: #8e8e8e; text-decoration: none; font-size: 12px; }
+    footer nav a:hover { text-decoration: underline; }
+
+    @media (max-width: 935px) {
+      .phone-wrap { display: none; }
+      .wrapper { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- phone mockup -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="screen-slider" id="slider">
+        <div class="screen">📸</div>
+        <div class="screen">🌄</div>
+        <div class="screen">🎨</div>
+        <div class="screen">🌊</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- right panel -->
+  <div class="panel">
+
+    <div class="card">
+      <div class="logo">Instagram</div>
+
+      <div class="form">
+        <div class="field">
+          <input type="text" id="username" placeholder="Phone number, username, or email" autocomplete="off"/>
+          <label for="username">Phone number, username, or email</label>
+        </div>
+
+        <div class="field">
+          <input type="password" id="password" placeholder="Password" autocomplete="off"/>
+          <label for="password">Password</label>
+          <button class="show-btn" type="button" onclick="togglePw(this)">Show</button>
+        </div>
+      </div>
+
+      <button class="login-btn" onclick="handleLogin(this)">Log in</button>
+
+      <div class="or-row">
+        <span></span><p>OR</p><span></span>
+      </div>
+
+      <button class="fb-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#385185">
+          <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.313 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.884v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+        </svg>
+        Log in with Facebook
+      </button>
+
+      <a href="#" class="forgot">Forgot password?</a>
+    </div>
+
+    <div class="signup-card">
+      Don't have an account? <a href="#">Sign up</a>
+    </div>
+
+    <div class="app-row">
+      <p>Get the app.</p>
+      <div class="badges">
+        <a class="badge" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-37.3-142.9-99.5c-43.3-71.5-78.1-188.5-78.1-300.4 0-186.6 121.7-285.1 241.7-285.1 63.2 0 116.5 41.8 156.3 41.8 37.8 0 97.6-44.1 167.5-44.1 27.3 0 108.2 2.6 168.3 97.8z"/><path d="M554 [FILL].9c28.7-36.6 44.5-86.8 44.5-137 0-7-0.6-14.1-1.9-20.7C547.4 44.1 500.1 16 455.9 16c-28.1 0-57.5 10.9-79.5 29.1-20.1 17-40.5 46.2-40.5 96.5 0 7.1 1.3 14.2 1.9 16.5 3.2.6 8.4 1.3 13.4 1.3 41.4 0 83.5-27.3 108.8-66.7z"/></svg>
+          <div><span>Download on the</span><strong>App Store</strong></div>
+        </a>
+        <a class="badge" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 512 512" fill="#262626"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c17.1-9.8 17.1-34.8-.5-60.8h-1l-.7.7v-.7zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+          <div><span>Get it on</span><strong>Google Play</strong></div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <nav>
+    <a href="#">Meta</a><a href="#">About</a><a href="#">Blog</a><a href="#">Jobs</a>
+    <a href="#">Help</a><a href="#">API</a><a href="#">Privacy</a><a href="#">Terms</a>
+    <a href="#">Locations</a><a href="#">Instagram Lite</a><a href="#">Threads</a>
+    <a href="#">Contact Uploading &amp; Non-Users</a><a href="#">Meta Verified</a>
+  </nav>
+  <p>English &nbsp;©&nbsp;2025 Instagram from Meta</p>
+</footer>
+
+<script>
+  // show/hide password
+  function togglePw(btn) {
+    const input = btn.previousElementSibling.previousElementSibling;
+    if (input.type === 'password') { input.type = 'text'; btn.textContent = 'Hide'; }
+    else { input.type = 'password'; btn.textContent = 'Show'; }
+  }
+
+  // simple login handler
+  function handleLogin(btn) {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    if (!u || !p) return;
+    btn.disabled = true;
+    btn.textContent = 'Logging in…';
+    setTimeout(() => { btn.disabled = false; btn.textContent = 'Log in'; alert('This is a UI demo – no real login occurs.'); }, 1400);
+  }
+
+  // slide phone screens
+  const screens = ['📸','🌄','🎨','🌊','🏙️','🌺'];
+  const emojis = ['📸','🌄','🎨','🌊','🏙️','🌺'];
+  const slider = document.getElementById('slider');
+  let idx = 0;
+
+  setInterval(() => {
+    idx = (idx + 1) % slider.children.length;
+    slider.style.transition = 'transform .6s ease';
+    slider.style.transform = `translateX(-${idx * 100}%)`;
+  }, 2800);
+</script>
+</body>
+</html>
